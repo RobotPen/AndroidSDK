@@ -114,4 +114,7 @@ public class Keys {
 	public static final String DEFAULT_AUTO_FIND_SCAN_KEY = "DEFAULT_AUTO_FIND_SCAN_KEY";
 	/**储存自动发现间隔**/
 	public static final String DEFAULT_AUTO_FIND_GAP_KEY = "DEFAULT_AUTO_FIND_GAP_KEY";
+	
+	/**用户文件目录key**/
+	public static final String USER_FOLDER_KEY = "USER_FOLDER_KEY";
 }
