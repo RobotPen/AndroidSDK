@@ -9,5 +9,7 @@ package cn.robotpen.file.symbol;
 public enum FileType {
 	PDF,
 	PPT,
-	WORD
+	WORD;
+	
+	
 }

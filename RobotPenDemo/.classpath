@@ -3,9 +3,11 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry exported="true" kind="lib" path="/Users/Xiaoz/Android Project/RobotPen/AndroidSDK/RobotPenSDK/bin/robotpensdk.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/RobotPenSDK"/>
+	<classpathentry exported="true" kind="lib" path="/RobotPenSDK/bin/robotpensdk.jar"/>
+	<classpathentry exported="true" kind="lib" path="/RobotPenFile/bin/robotpenfile.jar"/>
+	<classpathentry exported="true" kind="lib" path="/RobotPenFile/libs/android-async-http-1.4.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="/RobotPenFile/libs/httpclient-4.4.1.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

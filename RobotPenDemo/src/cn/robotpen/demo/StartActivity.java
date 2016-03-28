@@ -1,10 +1,12 @@
 package cn.robotpen.demo;
 
 import cn.robotpen.core.services.PenService;
-import cn.robotpen.core.services.UsbPenService;
-import cn.robotpen.core.symbol.DeviceVersion;
 import cn.robotpen.core.symbol.Keys;
-
+import cn.robotpen.file.model.ResponseRes;
+import cn.robotpen.file.qiniu.GetResourcesPort;
+import cn.robotpen.file.qiniu.GetResourcesPort.OnGetResourcesResult;
+import cn.robotpen.file.qiniu.QiniuConfig;
+import cn.robotpen.file.symbol.FileType;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -27,6 +29,7 @@ public class StartActivity extends Activity implements OnClickListener{
 			
 	private Button mBleBut;
 	private Button mUsbBut;
+	private Button mTestBut;
 	private ProgressDialog mProgressDialog;
 	
 	@Override
@@ -36,13 +39,18 @@ public class StartActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		
+		QiniuConfig.ACCESS_KEY = "";
+		QiniuConfig.SECRET_KEY = "";
+		
 		mHandler = new Handler();
 		
 		mBleBut = (Button) findViewById(R.id.bleBut);
 		mUsbBut = (Button) findViewById(R.id.usbBut);
+		mTestBut = (Button) findViewById(R.id.testBut);
 		
 		mBleBut.setOnClickListener(this);
 		mUsbBut.setOnClickListener(this);
+		mTestBut.setOnClickListener(this);
 	}
 
 	@Override
@@ -59,6 +67,28 @@ public class StartActivity extends Activity implements OnClickListener{
 			//绑定USB笔服务
 			RobotPenApplication.getInstance().bindPenService(Keys.APP_USB_SERVICE_NAME);
 			isPenServiceReady(Keys.APP_USB_SERVICE_NAME);
+			break;
+		case R.id.testBut:
+			new Thread(new Runnable() {
+	            @Override
+	            public void run() {
+	                try {
+	                	GetResourcesPort port = new GetResourcesPort("10001",new OnGetResourcesResult(){
+
+							@Override
+							public void result(int arg0, ResponseRes arg1) {
+								// TODO Auto-generated method stub
+								
+							}
+	                		
+	                	});
+	                	port.getDirectory(FileType.PDF);
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }).start();
+			
 			break;
 		}
 	}

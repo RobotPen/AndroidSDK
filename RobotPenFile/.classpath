@@ -5,7 +5,9 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/RobotPenSDK"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/main"/>
+	<classpathentry kind="lib" path="libs/qiniu-android-sdk-7.1.2.jar"/>
+	<classpathentry kind="lib" path="/RobotPenSDK/bin/robotpensdk.jar"/>
+	<classpathentry kind="lib" path="libs/android-async-http-1.4.9.jar"/>
+	<classpathentry kind="lib" path="libs/httpclient-4.4.1.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
