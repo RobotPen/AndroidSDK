@@ -39,8 +39,11 @@ public class StartActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		
-		QiniuConfig.ACCESS_KEY = "";
-		QiniuConfig.SECRET_KEY = "";
+//		QiniuConfig.ACCESS_KEY = "";
+//		QiniuConfig.SECRET_KEY = "";
+		
+		QiniuConfig.ACCESS_KEY = "i2hg6Yvl2mo86rEdgdgifL8eKAjHTVeWbXp9ZAa4";
+		QiniuConfig.SECRET_KEY = "ZQ6H3fFzcRPNeLwQIkVLyZCFYxhuRW4Ct5E1Zjld";
 		
 		mHandler = new Handler();
 		
