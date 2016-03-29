@@ -94,7 +94,7 @@ public class GetResourcesPort {
 				}
 		    }
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-				Log.v(TAG, "onFailure:"+errorResponse.toString());
+				Log.v(TAG, "onFailure:");
 				handlerResult(GET_ERROR, null);
 		    }
 		});
