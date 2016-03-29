@@ -69,26 +69,16 @@ public class StartActivity extends Activity implements OnClickListener{
 			isPenServiceReady(Keys.APP_USB_SERVICE_NAME);
 			break;
 		case R.id.testBut:
-			new Thread(new Runnable() {
-	            @Override
-	            public void run() {
-	                try {
-	                	GetResourcesPort port = new GetResourcesPort("10001",new OnGetResourcesResult(){
+			GetResourcesPort port = new GetResourcesPort("10001",new OnGetResourcesResult(){
 
-							@Override
-							public void result(int arg0, ResponseRes arg1) {
-								// TODO Auto-generated method stub
-								
-							}
-	                		
-	                	});
-	                	port.getDirectory(FileType.PDF);
-	                } catch (Exception e) {
-	                    e.printStackTrace();
-	                }
-	            }
-	        }).start();
-			
+				@Override
+				public void result(int arg0, ResponseRes arg1) {
+					// TODO Auto-generated method stub
+					
+				}
+        		
+        	});
+        	port.getDirectory(FileType.PDF);
 			break;
 		}
 	}
