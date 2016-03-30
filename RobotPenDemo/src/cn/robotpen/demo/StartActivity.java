@@ -2,6 +2,7 @@ package cn.robotpen.demo;
 
 import cn.robotpen.core.services.PenService;
 import cn.robotpen.core.symbol.Keys;
+import cn.robotpen.file.model.ResFile;
 import cn.robotpen.file.model.ResponseRes;
 import cn.robotpen.file.qiniu.GetResourcesPort;
 import cn.robotpen.file.qiniu.GetResourcesPort.OnGetResourcesResult;
@@ -31,6 +32,8 @@ public class StartActivity extends Activity implements OnClickListener{
 	private Button mUsbBut;
 	private Button mTestBut;
 	private ProgressDialog mProgressDialog;
+	
+	private GetResourcesPort mGetResourcesPort;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +72,22 @@ public class StartActivity extends Activity implements OnClickListener{
 			isPenServiceReady(Keys.APP_USB_SERVICE_NAME);
 			break;
 		case R.id.testBut:
-			GetResourcesPort port = new GetResourcesPort("10001",new OnGetResourcesResult(){
+			mGetResourcesPort = new GetResourcesPort("10001",new OnGetResourcesResult(){
 
 				@Override
 				public void result(int arg0, ResponseRes arg1) {
-					// TODO Auto-generated method stub
-					
+					if(arg0 == GetResourcesPort.GET_SUCCESS){
+						for(int i = 0;i < arg1.Items.size();i++){
+							if(arg1.Items.get(i).DecodePath != null){
+								getFileTest(arg1.Items.get(i));
+								break;
+							}
+						}
+					}
 				}
         		
         	});
-        	port.getDirectory(FileType.PDF);
+			mGetResourcesPort.getDirectory(FileType.PDF);
 			break;
 		}
 	}
@@ -88,6 +97,10 @@ public class StartActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		StartActivity.this.finish();
+	}
+	
+	private void getFileTest(ResFile file){
+		mGetResourcesPort.getFile(file);
 	}
 	
 	private void isPenServiceReady(final String svrName){

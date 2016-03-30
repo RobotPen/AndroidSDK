@@ -11,12 +11,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.robotpen.file.model.ResFile;
 import cn.robotpen.file.model.ResponseRes;
 import cn.robotpen.file.symbol.FileType;
+import cn.robotpen.file.symbol.ListType;
 
 /**
  * 
@@ -30,11 +33,11 @@ public class GetResourcesPort {
 	
 	public static final int GET_ERROR = 0;
 	public static final int GET_SUCCESS = 1;
-	public static final int GET_DIR = 1001;
-	public static final int GET_FILE = 1002;
 	
 	private final String mUserIdentifier;
 	private final OnGetResourcesResult mOnGetResourcesResult;
+	
+	private SyncHttpClient mSyncHttpClient;
 	
 	/**
 	 * 获取资源接口
@@ -44,18 +47,37 @@ public class GetResourcesPort {
     public GetResourcesPort(String userIdentifier,OnGetResourcesResult result){
     	this.mUserIdentifier = userIdentifier;
     	this.mOnGetResourcesResult = result;
+    	
+    	mSyncHttpClient = new SyncHttpClient();
+    }
+    
+    /**
+     * 取消所有请求
+     */
+    public void cancelAllRequests(){
+    	mSyncHttpClient.cancelAllRequests(true);
     }
 
 	public void getDirectory(FileType type){
 		getDirectory(type,null);
 	}
 	public void getDirectory(FileType type, String marker){
-		String prefix = mUserIdentifier +"/"+ type.toString() +"/";
-		String path = "/list?bucket="+ QiniuConfig.BUCKET +"&limit=10&delimiter=%2F&prefix="+ prefix;
+		String path = "/list?bucket="+ QiniuConfig.BUCKET;
+		path += "&limit=20";
+		path += "&delimiter=%2F";
+
+		String prefix;
+		if(type == FileType.ALL){
+			prefix = mUserIdentifier +"/";
+		}else{
+			prefix = mUserIdentifier +"/"+ type.toString() +"/";
+		}
+		path += "&prefix="+ prefix;
+		
 		if(marker != null)
 			path += "&marker="+marker;
 		
-		new Thread(new GetResourcesRunnable(path)).start();
+		new Thread(new GetResourcesRunnable(path,ListType.DIR)).start();
 	}
 
 	public void getFile(ResFile file){
@@ -63,30 +85,37 @@ public class GetResourcesPort {
 	}
 	public void getFile(ResFile file, String marker){
 		
-			
-		String prefix = file.Key.replace(file.getSuffix(), "");
+		String prefix = "";
+		try {
+			prefix = URLEncoder.encode(file.DecodePath, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		String path = "/list?bucket="+ QiniuConfig.BUCKET +"&limit=10&prefix="+ prefix;
 		if(marker != null)
 			path += "&marker="+marker;
 
-		new Thread(new GetResourcesRunnable(path)).start();
+		new Thread(new GetResourcesRunnable(path,ListType.FILE)).start();
 	}
 	
-	private void getResources(final String path){
+	private void getResources(final String path,final ListType getType){
 		String url = QiniuConfig.RSF_DOMAIN + path;
 		
-		SyncHttpClient client = new SyncHttpClient();
-		client.removeHeader("Host");
-		client.addHeader("Host", QiniuConfig.RSF_HOST);
-		client.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		client.addHeader("Authorization", "QBox "+QiniuConfig.getToken(path));
+		mSyncHttpClient.removeHeader("Host");
+		mSyncHttpClient.removeHeader("Authorization");
+		
+		mSyncHttpClient.addHeader("Host", QiniuConfig.RSF_HOST);
+		mSyncHttpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
+		mSyncHttpClient.addHeader("Authorization", "QBox "+QiniuConfig.getToken(path));
 		Log.v(TAG, "url:"+url);
-		client.post(url, new JsonHttpResponseHandler(){
+		mSyncHttpClient.post(url, new JsonHttpResponseHandler(){
 			@Override
 		    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 				Log.v(TAG, "onSuccess:"+response.toString());
 				try {
-					handlerResponseResources(response,path);
+					handlerResponseResources(response,path,getType);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -94,32 +123,35 @@ public class GetResourcesPort {
 				}
 		    }
 			public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-				Log.v(TAG, "onFailure:");
+				Log.v(TAG, "onFailure:"+(errorResponse != null?errorResponse.toString():""));
 				handlerResult(GET_ERROR, null);
 		    }
 		});
 	}
 	
-	private void handlerResponseResources(JSONObject response,String path) throws JSONException{
+	private void handlerResponseResources(JSONObject response,String path,ListType type) throws JSONException{
 		ResponseRes res = new ResponseRes();
 		if(!response.isNull("marker"))
 			res.Marker = response.getString("marker");
 		
 		JSONArray items = response.getJSONArray("items");
 		if(items.length() > 0){
-			//用于检查是否转码完成
 			List<String> dirList = null; 
-			JSONArray commonPrefixes = null;
-			if(!response.isNull("commonPrefixes")){
-				commonPrefixes = response.getJSONArray("commonPrefixes");
-				if(commonPrefixes.length() > 0){
-					dirList = new ArrayList<String>(commonPrefixes.length());
-					for(int i = 0;i < commonPrefixes.length();i++){
-						dirList.add(commonPrefixes.getString(i));
+			if(type == ListType.DIR){
+				//用于检查是否转码完成
+				JSONArray commonPrefixes = null;
+				if(!response.isNull("commonPrefixes")){
+					commonPrefixes = response.getJSONArray("commonPrefixes");
+					if(commonPrefixes.length() > 0){
+						dirList = new ArrayList<String>(commonPrefixes.length());
+						for(int i = 0;i < commonPrefixes.length();i++){
+							dirList.add(commonPrefixes.getString(i));
+						}
 					}
 				}
 			}
-
+			
+			res.Type = type;
 			res.Items = new ArrayList<ResFile>(items.length());
 			ResFile item;
 			for(int i = 0;i < items.length();i++){
@@ -127,7 +159,7 @@ public class GetResourcesPort {
 				//检查是否转码完成
 				String dir = item.Key.replace(item.getSuffix(),"") +"/";
 				if(dirList != null && dirList.contains(dir)){
-					item.isDecode = true;
+					item.DecodePath = dir;
 				}
 				res.Items.add(item);
 			}
@@ -147,13 +179,15 @@ public class GetResourcesPort {
 	 *
 	 */
 	private class GetResourcesRunnable implements Runnable{
-		private String path;
-		public GetResourcesRunnable(String path){
+		String path;
+		ListType type;
+		public GetResourcesRunnable(String path,ListType type){
 			this.path = path;
+			this.type = type;
 		}
 		@Override
 		public void run() {
-			getResources(path);
+			getResources(path,type);
 		}
 	}
 	
