@@ -77,7 +77,11 @@ public class GetResourcesPort {
 		if(marker != null)
 			path += "&marker="+marker;
 		
+<<<<<<< HEAD
 		new Thread(new GetResourcesRunnable(path,ListType.DIR)).start();
+=======
+		new Thread(new GetResourcesRunnable(path)).start();
+>>>>>>> devlop
 	}
 
 	public void getFile(ResFile file){
@@ -97,7 +101,11 @@ public class GetResourcesPort {
 		if(marker != null)
 			path += "&marker="+marker;
 
+<<<<<<< HEAD
 		new Thread(new GetResourcesRunnable(path,ListType.FILE)).start();
+=======
+		new Thread(new GetResourcesRunnable(path)).start();
+>>>>>>> devlop
 	}
 	
 	private void getResources(final String path,final ListType getType){
@@ -179,6 +187,7 @@ public class GetResourcesPort {
 	 *
 	 */
 	private class GetResourcesRunnable implements Runnable{
+<<<<<<< HEAD
 		String path;
 		ListType type;
 		public GetResourcesRunnable(String path,ListType type){
@@ -188,6 +197,15 @@ public class GetResourcesPort {
 		@Override
 		public void run() {
 			getResources(path,type);
+=======
+		private String path;
+		public GetResourcesRunnable(String path){
+			this.path = path;
+		}
+		@Override
+		public void run() {
+			getResources(path);
+>>>>>>> devlop
 		}
 	}
 	

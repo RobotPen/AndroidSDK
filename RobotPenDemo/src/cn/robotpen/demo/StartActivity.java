@@ -42,8 +42,11 @@ public class StartActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		
-		QiniuConfig.ACCESS_KEY = "";
-		QiniuConfig.SECRET_KEY = "";
+//		QiniuConfig.ACCESS_KEY = "";
+//		QiniuConfig.SECRET_KEY = "";
+		
+		QiniuConfig.ACCESS_KEY = "i2hg6Yvl2mo86rEdgdgifL8eKAjHTVeWbXp9ZAa4";
+		QiniuConfig.SECRET_KEY = "ZQ6H3fFzcRPNeLwQIkVLyZCFYxhuRW4Ct5E1Zjld";
 		
 		mHandler = new Handler();
 		
@@ -72,6 +75,7 @@ public class StartActivity extends Activity implements OnClickListener{
 			isPenServiceReady(Keys.APP_USB_SERVICE_NAME);
 			break;
 		case R.id.testBut:
+<<<<<<< HEAD
 			mGetResourcesPort = new GetResourcesPort("10001",new OnGetResourcesResult(){
 
 				@Override
@@ -88,6 +92,18 @@ public class StartActivity extends Activity implements OnClickListener{
         		
         	});
 			mGetResourcesPort.getDirectory(FileType.PDF);
+=======
+			GetResourcesPort port = new GetResourcesPort("10001",new OnGetResourcesResult(){
+
+				@Override
+				public void result(int arg0, ResponseRes arg1) {
+					// TODO Auto-generated method stub
+					
+				}
+        		
+        	});
+        	port.getDirectory(FileType.PDF);
+>>>>>>> devlop
 			break;
 		}
 	}
