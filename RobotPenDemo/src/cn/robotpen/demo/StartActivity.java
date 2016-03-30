@@ -73,13 +73,9 @@ public class StartActivity extends Activity implements OnClickListener{
 			break;
 		case R.id.testBut:
 			GetResourcesPort port = new GetResourcesPort("10001",new OnGetResourcesResult(){
-
 				@Override
 				public void result(int arg0, ResponseRes arg1) {
-					// TODO Auto-generated method stub
-					
 				}
-        		
         	});
         	port.getDirectory(FileType.PDF);
 			break;
