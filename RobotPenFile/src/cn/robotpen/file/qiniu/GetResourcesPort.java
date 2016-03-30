@@ -55,7 +55,7 @@ public class GetResourcesPort {
 		if(marker != null)
 			path += "&marker="+marker;
 		
-		getResources(path);
+		new Thread(new GetResourcesRunnable(path)).start();
 	}
 
 	public void getFile(ResFile file){
@@ -69,7 +69,7 @@ public class GetResourcesPort {
 		if(marker != null)
 			path += "&marker="+marker;
 
-		getResources(path);
+		new Thread(new GetResourcesRunnable(path)).start();
 	}
 	
 	private void getResources(final String path){
@@ -138,6 +138,23 @@ public class GetResourcesPort {
 	private void handlerResult(int state,ResponseRes res){
 		if(mOnGetResourcesResult != null)
 			mOnGetResourcesResult.result(state, res);
+	}
+	
+	/**
+	 * 发起获取资源请求
+	 * @author Luis
+	 * @date 2016年3月30日 上午3:06:36
+	 *
+	 */
+	private class GetResourcesRunnable implements Runnable{
+		private String path;
+		public GetResourcesRunnable(String path){
+			this.path = path;
+		}
+		@Override
+		public void run() {
+			getResources(path);
+		}
 	}
 	
 	/**
