@@ -63,4 +63,6 @@ public class QiniuConfig {
 		String accessToken = ACCESS_KEY +":"+ encodeSign;
 		return accessToken;
     }
+ 
+    
 }

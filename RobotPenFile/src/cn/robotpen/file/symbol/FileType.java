@@ -7,6 +7,7 @@ package cn.robotpen.file.symbol;
  * Description
  */
 public enum FileType {
+	ALL,
 	PDF,
 	PPT,
 	WORD;

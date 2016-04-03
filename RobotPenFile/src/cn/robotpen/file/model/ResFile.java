@@ -3,8 +3,6 @@ package cn.robotpen.file.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 /**
  * 
  * @author Luis
@@ -32,9 +30,9 @@ public class ResFile {
 	public String Hash;
 	
 	/**
-	 * 是否转换完成
+	 * 转换完成后的目录，如果为NULL那么表示还未转换完成
 	 */
-	public boolean isDecode;
+	public String DecodePath;
 	
 	/**
 	 * 资源内容的MIME类型

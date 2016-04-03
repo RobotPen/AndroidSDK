@@ -2,6 +2,8 @@ package cn.robotpen.file.model;
 
 import java.util.List;
 
+import cn.robotpen.file.symbol.ListType;
+
 /**
  * 
  * @author Luis
@@ -21,5 +23,8 @@ public class ResponseRes {
 	 */
 	public String Marker;
 	
-	
+	/**
+	 * 当前资源列队类型
+	 */
+	public ListType Type;
 }
