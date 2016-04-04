@@ -3,8 +3,6 @@ package cn.robotpen.file.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 /**
  * 
  * @author Luis
