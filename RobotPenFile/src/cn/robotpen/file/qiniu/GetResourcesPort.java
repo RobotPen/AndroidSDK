@@ -63,8 +63,8 @@ public class GetResourcesPort {
 	}
 	public void getDirectory(FileType type, String marker){
 		String path = "/list?bucket="+ QiniuConfig.BUCKET;
-		path += "&limit=20";
-		path += "&delimiter=%2F";
+		//path += "&limit=20";
+		//path += "&delimiter=%2F";
 
 		String prefix;
 		if(type == FileType.ALL){
@@ -72,7 +72,7 @@ public class GetResourcesPort {
 		}else{
 			prefix = mUserIdentifier +"/"+ type.toString() +"/";
 		}
-		path += "&prefix="+ prefix;
+		//path += "&prefix="+ prefix;
 		
 		if(marker != null)
 			path += "&marker="+marker;
@@ -102,14 +102,16 @@ public class GetResourcesPort {
 	
 	private void getResources(final String path,final ListType getType){
 		String url = QiniuConfig.RSF_DOMAIN + path;
+		String token = "QBox "+QiniuConfig.getToken(path);
 		
 		mSyncHttpClient.removeHeader("Host");
 		mSyncHttpClient.removeHeader("Authorization");
 		
 		mSyncHttpClient.addHeader("Host", QiniuConfig.RSF_HOST);
 		mSyncHttpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		mSyncHttpClient.addHeader("Authorization", "QBox "+QiniuConfig.getToken(path));
+		mSyncHttpClient.addHeader("Authorization", token);
 		Log.v(TAG, "url:"+url);
+		
 		mSyncHttpClient.post(url, new JsonHttpResponseHandler(){
 			@Override
 		    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
