@@ -3,9 +3,14 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry exported="true" kind="lib" path="/RobotPenFile/libs/android-async-http-1.4.9.jar"/>
-	<classpathentry exported="true" kind="lib" path="/RobotPenFile/libs/httpclient-4.4.1.1.jar"/>
+	<classpathentry kind="lib" path="/RobotPenFile/libs/android-async-http-1.4.9.jar"/>
+	<classpathentry kind="lib" path="/RobotPenFile/libs/httpclient-4.4.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/qiniu-android-sdk-7.1.2.jar"/>
+	<classpathentry kind="lib" path="libs/happy-dns-0.2.7.jar"/>
+	<classpathentry kind="lib" path="libs/okio-1.6.0.jar"/>
+	<classpathentry kind="lib" path="libs/okhttp-2.7.5.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="/RobotPenFile"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
