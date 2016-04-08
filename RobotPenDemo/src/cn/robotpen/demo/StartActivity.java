@@ -70,7 +70,7 @@ public class StartActivity extends Activity implements OnClickListener {
 		mUploadBut.setOnClickListener(this);
 		// initData();
 	}
-
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -140,7 +140,7 @@ public class StartActivity extends Activity implements OnClickListener {
 
 			);
 			if (!SAVE_FILE_DIRECTORY.equals("") || SAVE_FILE_DIRECTORY != null) {
-				mUpLoadResourcesPort.upLoadResources(SAVE_FILE_DIRECTORY);
+				//mUpLoadResourcesPort.upLoadResources(SAVE_FILE_DIRECTORY);
 			}
 			break;
 		}

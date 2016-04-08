@@ -1,5 +1,6 @@
 package cn.robotpen.file.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.robotpen.file.symbol.ListType;
@@ -11,7 +12,8 @@ import cn.robotpen.file.symbol.ListType;
  *
  * Description
  */
-public class ResponseRes {
+@SuppressWarnings("serial")
+public class ResponseRes implements Serializable {
 	
 	/**
 	 * 资源列队
@@ -27,4 +29,30 @@ public class ResponseRes {
 	 * 当前资源列队类型
 	 */
 	public ListType Type;
+	
+	
+	public List<ResFile> getItems() {
+		return Items;
+	}
+
+	public void setItems(List<ResFile> items) {
+		Items = items;
+	}
+
+	public String getMarker() {
+		return Marker;
+	}
+
+	public void setMarker(String marker) {
+		Marker = marker;
+	}
+
+	public ListType getType() {
+		return Type;
+	}
+
+	public void setType(ListType type) {
+		Type = type;
+	}
+	
 }
