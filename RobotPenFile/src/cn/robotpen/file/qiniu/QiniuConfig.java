@@ -49,17 +49,22 @@ public class QiniuConfig {
      * @return
      */
     public static String getToken(String path){
-    	return getToken(path,"");
+    	return getToken(path,null);
     }
     
     /**
      * 获取Token
      * @param path	请求路径
+     * @param gap	连接参数
      * @param query 请求参数
      * @return
      */
-    public static String getToken(String path,String query){
-    	String encodeSign = StringUtil.hmac_sha1(SECRET_KEY, path+"\n"+query);
+    public static String getToken(String path,String body){
+    	String sign = path;
+    	if(body != null)sign += "\n"+ body;
+    	
+    	String encodeSign = StringUtil.sha1Base64_encode(SECRET_KEY, sign);
+    	encodeSign = StringUtil.urlsafe_base64_encode(encodeSign);
 		String accessToken = ACCESS_KEY +":"+ encodeSign;
 		return accessToken;
     }

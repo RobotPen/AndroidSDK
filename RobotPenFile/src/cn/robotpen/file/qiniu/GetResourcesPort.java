@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.robotpen.file.model.ResFile;
 import cn.robotpen.file.model.ResponseRes;
@@ -66,8 +67,7 @@ public class GetResourcesPort {
 
 	public void getDirectory(FileType type, String marker) {
 		String path = "/list?bucket=" + QiniuConfig.BUCKET;
-		path += "&limit=10";
-		path += "&delimiter=%2F";
+		path += "&limit=50";
 
 		String prefix;
 		if (type == FileType.ALL) {
@@ -113,7 +113,7 @@ public class GetResourcesPort {
 
 		mSyncHttpClient.addHeader("Host", QiniuConfig.RSF_HOST);
 		mSyncHttpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		mSyncHttpClient.addHeader("Authorization", "QBox " + QiniuConfig.getToken(path));
+		mSyncHttpClient.addHeader("Authorization", "QBox " + QiniuConfig.getToken(path,""));
 		Log.v(TAG, "url:" + url);
 		mSyncHttpClient.post(url, new JsonHttpResponseHandler() {
 			@Override
@@ -164,13 +164,17 @@ public class GetResourcesPort {
 							ResFile file = new ResFile();
 							map.put(key, file);
 						}else{
-							ResFile file = map.get(item.Key);
+							ResFile file = map.get(key);
 							file.addChildResFile(item);
 						}
 					}
 				}
 			}
-			res.Items = (ArrayList<ResFile>)map.values();
+			
+			res.Items =  new ArrayList<ResFile>(map.size());
+			for(String key : map.keySet()){
+				res.Items.add(map.get(key));
+			}
 		}
 		handlerResult(GET_SUCCESS, res);
 	}

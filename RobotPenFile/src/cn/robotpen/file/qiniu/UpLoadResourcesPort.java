@@ -47,6 +47,7 @@ public class UpLoadResourcesPort {
 			JSONObject _json = new JSONObject();
 			_json.put("deadline", delayTimes);// 有效时间为一个小时
 			_json.put("scope", QiniuConfig.BUCKET + ":" + key);
+			_json.put("insertOnly", 1);//不允许覆盖
 			final String _uploadToken = getToken(_json);
 			UploadManager uploadManager = new UploadManager();
 			uploadManager.put(path, key, _uploadToken, new UpCompletionHandler() {

@@ -2,13 +2,6 @@ package cn.robotpen.demo;
 
 import cn.robotpen.core.services.PenService;
 import cn.robotpen.core.symbol.Keys;
-import cn.robotpen.file.model.ResFile;
-import cn.robotpen.file.model.ResponseRes;
-import cn.robotpen.file.qiniu.GetResourcesPort;
-import cn.robotpen.file.qiniu.GetResourcesPort.OnGetResourcesResult;
-import cn.robotpen.file.qiniu.QiniuConfig;
-import cn.robotpen.file.symbol.FileType;
-import com.qiniu.android.http.ResponseInfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -17,14 +10,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
-import cn.robotpen.file.qiniu.UpLoadResourcesPort;
-import cn.robotpen.file.qiniu.UpLoadResourcesPort.UploadCallBackResult;
 
 /**
  * 
@@ -40,8 +30,6 @@ public class StartActivity extends Activity implements OnClickListener {
 	private Button mTestBut;
 	private Button mUploadBut;
 	private ProgressDialog mProgressDialog;
-	private GetResourcesPort mGetResourcesPort;
-	private UpLoadResourcesPort mUpLoadResourcesPort;
 	public static final String TAG = StartActivity.class.getSimpleName();
 	private Context mContext;
 	private String SAVE_FILE_DIRECTORY = "";
@@ -53,11 +41,7 @@ public class StartActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		mContext = this;
-		// QiniuConfig.ACCESS_KEY = "";
-		// QiniuConfig.SECRET_KEY = "";
 
-		QiniuConfig.ACCESS_KEY = "i2hg6Yvl2mo86rEdgdgifL8eKAjHTVeWbXp9ZAa4";
-		QiniuConfig.SECRET_KEY = "ZQ6H3fFzcRPNeLwQIkVLyZCFYxhuRW4Ct5E1Zjld";
 		
 		mHandler = new Handler();
 		mBleBut = (Button) findViewById(R.id.bleBut);
@@ -114,34 +98,11 @@ public class StartActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.testBut:
 
-			mGetResourcesPort = new GetResourcesPort("10001", new OnGetResourcesResult() {
-				@Override
-				public void result(int arg0, ResponseRes arg1) {
-					if (arg0 == GetResourcesPort.GET_SUCCESS) {
-						for (int i = 0; i < arg1.Items.size(); i++) {
-							if (arg1.Items.get(i).ChildRes != null && arg1.Items.get(i).getChildCount() == arg1.Items.get(i).getChildCountMax()) {
-								getFileTest(arg1.Items.get(i));
-								break;
-							}
-						}
-					}
-				}
-			});
-			mGetResourcesPort.getDirectory(FileType.PDF);
+			
 			break;
 
 		case R.id.upload_But: // 测试上传资源
-			initData();
-			mUpLoadResourcesPort = new UpLoadResourcesPort(new UploadCallBackResult() {
-				@Override
-				public void result(ResponseInfo res) {
-					Log.v(TAG, "onSuccess:" + res.toString());
-					Toast.makeText(StartActivity.this, res.toString(), Toast.LENGTH_LONG).show();
-				}
-			});
-			if (!SAVE_FILE_DIRECTORY.equals("") || SAVE_FILE_DIRECTORY != null) {
-				//mUpLoadResourcesPort.upLoadResources(SAVE_FILE_DIRECTORY);
-			}
+		
 			break;
 		}
 	}
@@ -150,10 +111,6 @@ public class StartActivity extends Activity implements OnClickListener {
 	protected void onDestroy() {
 		super.onDestroy();
 		StartActivity.this.finish();
-	}
-
-	private void getFileTest(ResFile file) {
-		mGetResourcesPort.getFile(file);
 	}
 
 	private void isPenServiceReady(final String svrName) {

@@ -15,13 +15,14 @@ import android.util.Base64;
  */
 public class StringUtil {
 
-	public static String urlsafe_base64_encode(String key, String datas){
-		String str = hmac_sha1(key,datas);
-		str = str.replace("+", "-").replace("/", "_");
+	public static String urlsafe_base64_encode(String str){
+		if(str != null){
+			str = str.replace("+", "-").replace("/", "_");
+		}
 		return str;
 	}
 	
-	public static String hmac_sha1(String key, String datas){  
+	public static String sha1Base64_encode(String key, String datas){  
         String reString = "";  
 
         try{  
