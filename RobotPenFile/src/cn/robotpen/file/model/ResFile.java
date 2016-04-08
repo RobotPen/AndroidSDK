@@ -2,6 +2,7 @@ package cn.robotpen.file.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +14,8 @@ import org.json.JSONObject;
  *
  * Description
  */
-public class ResFile {
+@SuppressWarnings("serial")
+public class ResFile implements Serializable{
 	
 	/**
 	 * 资源文件名称
@@ -47,16 +49,17 @@ public class ResFile {
 	 */
 	public List<ResFile> ChildRes;
 	
-	public ResFile(){
-		
-	}
-	
 	public ResFile(JSONObject jsonObj) throws JSONException{
 		Key = jsonObj.getString("key");
 		PutTime = jsonObj.getLong("putTime");
 		Hash = jsonObj.getString("hash");
 		MimeType = jsonObj.getString("mimeType");
 		FileSize = jsonObj.getLong("fsize");
+	}
+	
+	
+	public ResFile(){
+		
 	}
 	
 	/**

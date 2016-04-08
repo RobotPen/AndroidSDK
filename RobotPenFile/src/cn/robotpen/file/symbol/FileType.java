@@ -12,5 +12,14 @@ public enum FileType {
 	PPT,
 	WORD;
 	
-	
+	public static FileType getType(String type){
+		if("pdf".equals(type)){
+			return PDF;
+		}else if("doc".equals(type) || "docx".equals(type)){
+			return WORD;
+		}else if("ppt".equals(type)||"pptx".equals(type)){
+			return PPT;
+		}
+		return ALL;
+	}
 }

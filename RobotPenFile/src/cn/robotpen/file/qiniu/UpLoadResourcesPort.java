@@ -22,13 +22,15 @@ public class UpLoadResourcesPort {
 	private static long delayTimes = 3029414400l; // unix时间戳:2065-12-31 00:00:00
 	private static final String MAC_NAME = "HmacSHA1";
 	private static final String ENCODING = "UTF-8";
+	public static final int UPLOAD_ERROR = 4;
+	public static final int UPLOAD_SUCCESS = 3;
 
 	public UpLoadResourcesPort(UploadCallBackResult mUploadCallBackResult) {
 		this.mUploadCallBackResult = mUploadCallBackResult;
 	}
 
-	public void upLoadResources(String data) {
-		new Thread(new UpLoadResourcesRunnable(data)).start();
+	public void upLoadResources(String uploadPath, String key) {
+		new Thread(new UpLoadResourcesRunnable(uploadPath, key)).start();
 	}
 
 	/**
@@ -39,15 +41,15 @@ public class UpLoadResourcesPort {
 	 * @param path
 	 *            上传文件的路径地址
 	 */
-	public void uploadPic(final String path, final UploadCallBackResult callBack) {
+	public void uploadPic(final String path, String key, final UploadCallBackResult callBack) {
 		try {
 			// 1:第一种方式 构造上传策略
 			JSONObject _json = new JSONObject();
 			_json.put("deadline", delayTimes);// 有效时间为一个小时
-			_json.put("scope", QiniuConfig.BUCKET);
+			_json.put("scope", QiniuConfig.BUCKET + ":" + key);
 			final String _uploadToken = getToken(_json);
 			UploadManager uploadManager = new UploadManager();
-			uploadManager.put(path, null, _uploadToken, new UpCompletionHandler() {
+			uploadManager.put(path, key, _uploadToken, new UpCompletionHandler() {
 				@Override
 				public void complete(String key, ResponseInfo info, JSONObject response) {
 					if (info.isOK()) {
@@ -111,14 +113,16 @@ public class UpLoadResourcesPort {
 	 */
 	private class UpLoadResourcesRunnable implements Runnable {
 		String path;
+		String key;
 
-		public UpLoadResourcesRunnable(String path) {
+		public UpLoadResourcesRunnable(String path, String key) {
 			this.path = path;
+			this.key = key;
 		}
 
 		@Override
 		public void run() {
-			uploadPic(path, mUploadCallBackResult);
+			uploadPic(path, key, mUploadCallBackResult);
 
 		}
 	}
