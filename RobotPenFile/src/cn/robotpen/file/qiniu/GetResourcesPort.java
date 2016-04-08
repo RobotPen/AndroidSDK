@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import cn.robotpen.file.model.ResFile;
 import cn.robotpen.file.model.ResponseRes;
@@ -142,33 +142,35 @@ public class GetResourcesPort {
 
 		JSONArray items = response.getJSONArray("items");
 		if (items.length() > 0) {
-			List<String> dirList = null;
-			if (type == ListType.DIR) {
-				// 用于检查是否转码完成
-				JSONArray commonPrefixes = null;
-				if (!response.isNull("commonPrefixes")) {
-					commonPrefixes = response.getJSONArray("commonPrefixes");
-					if (commonPrefixes.length() > 0) {
-						dirList = new ArrayList<String>(commonPrefixes.length());
-						for (int i = 0; i < commonPrefixes.length(); i++) {
-							dirList.add(commonPrefixes.getString(i));
+			HashMap<String,ResFile> map = new HashMap<String,ResFile>();
+			
+			res.Type = type;
+			//res.Items = new ArrayList<ResFile>();
+			ResFile item;
+			for (int i = 0; i < items.length(); i++) {
+				item = new ResFile(items.getJSONObject(i));
+				String[] sp = item.Key.split("/");
+				if(sp.length == 3){
+					if(!map.containsKey(item.Key)){
+						map.put(item.Key, item);
+					}else{
+						ResFile file = map.get(item.Key);
+						file.copy(item);
+					}
+				}else if(sp.length == 4){
+					if(item.Key.endsWith(".jpg")){
+						String key = item.Key.replace("/"+sp[sp.length - 1], "");
+						if(!map.containsKey(key)){
+							ResFile file = new ResFile();
+							map.put(key, file);
+						}else{
+							ResFile file = map.get(item.Key);
+							file.addChildResFile(item);
 						}
 					}
 				}
 			}
-
-			res.Type = type;
-			res.Items = new ArrayList<ResFile>(items.length());
-			ResFile item;
-			for (int i = 0; i < items.length(); i++) {
-				item = new ResFile(items.getJSONObject(i));
-				// 检查是否转码完成
-				String dir = item.Key + "/";
-				if (dirList != null && dirList.contains(dir)) {
-					item.DecodePath = dir;
-				}
-				res.Items.add(item);
-			}
+			res.Items = (ArrayList<ResFile>)map.values();
 		}
 		handlerResult(GET_SUCCESS, res);
 	}

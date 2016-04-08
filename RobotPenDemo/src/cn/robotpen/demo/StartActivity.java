@@ -119,7 +119,7 @@ public class StartActivity extends Activity implements OnClickListener {
 				public void result(int arg0, ResponseRes arg1) {
 					if (arg0 == GetResourcesPort.GET_SUCCESS) {
 						for (int i = 0; i < arg1.Items.size(); i++) {
-							if (arg1.Items.get(i).DecodePath != null) {
+							if (arg1.Items.get(i).ChildRes != null && arg1.Items.get(i).getChildCount() == arg1.Items.get(i).getChildCountMax()) {
 								getFileTest(arg1.Items.get(i));
 								break;
 							}
@@ -221,8 +221,7 @@ public class StartActivity extends Activity implements OnClickListener {
 			{ ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
 			{ ".ppt", "application/vnd.ms-powerpoint" }, 
 			{ ".pdf", "application/pdf" },
-			{ ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
-			{ ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
+			{ ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" }
 	};
 
 }
