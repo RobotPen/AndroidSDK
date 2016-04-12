@@ -11,7 +11,7 @@ import android.util.Log;
 
 import cn.robotpen.core.symbol.RecordLevel;
 import cn.robotpen.core.utils.BitmapUtil;
-import cn.robotpen.core.utils.FFMergePictureUtils;
+import cn.robotpen.core.utils.RecordImageUtil;
 import cn.robotpen.core.utils.FileUtils;
 
 import java.nio.ByteBuffer;
@@ -73,7 +73,7 @@ public class ImageRecordModule {
     private ExecutorService mCacheThreadExecutor;
 
     private AudioRecord mAudioRecord;
-    private FFMergePictureUtils mFFMergePictureUtils;
+    private RecordImageUtil mFFMergePictureUtils;
     
     /**单个图片数据缓存**/
     private ByteBuffer mImageBuffer;
@@ -103,7 +103,7 @@ public class ImageRecordModule {
             mCacheThreadExecutor = Executors.newFixedThreadPool(1);//写入缓存线程定长1，防止某些进程过快导致帧顺序错乱
 
         if(mFFMergePictureUtils == null)
-            mFFMergePictureUtils = new FFMergePictureUtils();
+            mFFMergePictureUtils = new RecordImageUtil();
 
         if(mAudioRecord == null)
             initAudioRecord();

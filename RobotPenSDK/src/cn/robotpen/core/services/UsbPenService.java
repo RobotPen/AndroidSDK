@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.robotpen.core.common.Listeners.OnScanDeviceListener;
-import cn.robotpen.core.model.AutoFindConfig;
 import cn.robotpen.core.model.DeviceObject;
 import cn.robotpen.core.model.PointObject;
 import cn.robotpen.core.symbol.ConnectState;
@@ -335,8 +334,9 @@ public class UsbPenService extends PenService{
 			String action = intent.getAction();
 			if(UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)){
 				//USB插入
-				AutoFindConfig config = getAutoFindConfig();
-				if(config.isAutoFind)scanDevice(null);
+				//AutoFindConfig config = getAutoFindConfig();
+				//if(config.isAutoFind)
+				scanDevice(null);
 				
 			}else if(UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)){
 				//USB拔出

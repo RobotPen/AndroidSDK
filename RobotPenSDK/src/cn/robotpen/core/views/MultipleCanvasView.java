@@ -40,6 +40,7 @@ public class MultipleCanvasView extends FrameLayout implements OnLongClickListen
     private int mPenWeight = 3;
     private int mPenColor = Color.BLACK;
     private int mBgColor = Color.WHITE;
+    private int mBgResId = 0;
     private boolean mIsRubber = false;
     private boolean mIsEditPhoto = false;
     
@@ -93,6 +94,7 @@ public class MultipleCanvasView extends FrameLayout implements OnLongClickListen
             this.mPenWeight = mCanvasManageInterface.getPenWeight();
             this.mPenColor = mCanvasManageInterface.getPenColor();
             this.mBgColor = mCanvasManageInterface.getBgColor();
+            this.mBgResId = mCanvasManageInterface.getBgResId();
             this.mIsRubber = mCanvasManageInterface.getIsRubber();
             initObjects();
     	}
@@ -101,7 +103,8 @@ public class MultipleCanvasView extends FrameLayout implements OnLongClickListen
     private void initObjects(){
     	this.removeAllViews();
     	this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-    	this.setBackgroundColor(mBgColor);
+    	if(mBgColor > 0)this.setBackgroundColor(mBgColor);
+    	if(mBgResId > 0)this.setBackgroundResource(mBgResId);
 
         mPenPaint = new Paint(Paint.DITHER_FLAG);//创建一个画笔
         mPenPaint.setStyle(Paint.Style.STROKE);//设置非填充
@@ -432,6 +435,12 @@ public class MultipleCanvasView extends FrameLayout implements OnLongClickListen
          * @return
          */
         int getBgColor();
+        
+        /**
+         * 获取背景图片
+         * @return
+         */
+        int getBgResId();
 
         /**
          * 获取画布宽度

@@ -3,7 +3,7 @@ package cn.robotpen.core.utils;
 /**
  * Created by Luis on 16/1/28.
  */
-public class FFMergePictureUtils {
+public class RecordImageUtil {
 
     public native void setVideoRate(int rate);
     public native float getTimeDifference();
